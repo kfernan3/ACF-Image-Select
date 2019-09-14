@@ -10,7 +10,7 @@ class acf_field_image_select extends acf_field
 	*  @since	3.6
 	*  @date	23/01/13
 	*/
-	
+
 	function __construct()
 	{
 		// vars
@@ -24,20 +24,20 @@ class acf_field_image_select extends acf_field
 			'image_path'		=>	get_template_directory_uri() . '/images/',
 			'image_extension'   => 'png',
 		);
-		
+
 		// settings
 		$this->settings = array(
 			'path'				=> apply_filters('acf/helpers/get_path', __FILE__),
 			'dir'				=> apply_filters('acf/helpers/get_dir', __FILE__),
 			'version'=> '1.0.0'
 		);
-		
+
 		// do not delete!
     	parent::__construct();
-  
+
 	}
-	
-		
+
+
 	/*
 	*  create_field()
 	*
@@ -49,13 +49,13 @@ class acf_field_image_select extends acf_field
 	*  @since	3.6
 	*  @date	23/01/13
 	*/
-	
+
 	function render_field( $field )
 	{
 		// vars
 		$i = 0;
 		$e = '<ul class="acf-image-select-list ' . esc_attr($field['class']) . '" data-image-select-multiple="'.$field['multiple'].'">';
-		
+
 		// add choices
 		if( is_array($field['choices']) )
 		{
@@ -86,11 +86,11 @@ class acf_field_image_select extends acf_field
 						}
 					}
 				}
-				
+
 				// HTML
 				$field_id = esc_attr($field['id']) . '-' . esc_attr($key);
 				$e .= '<li class="acf-image-select">';
-					
+
 					$e .= '<label for="' . $field_id . '" class="'.$class.'">';
 						$e .= '<input id="' . $field_id . '" class="item-input" type="radio" name="' . esc_attr($field['name']) . '" value="' . esc_attr($key) . '" ' .  $atts  . ' />';
 						$e .= '<img class="item-image ' . $field_id . '-image" alt="'.$value.'" src="'.$field['image_path'].esc_attr($key).'.'.$field['image_extension'].'">';
@@ -100,13 +100,13 @@ class acf_field_image_select extends acf_field
 				$e .= '</li>';
 			}
 		}
-		
+
 		$e .= '</ul>';
-		
+
 		echo $e;
-		
+
 	}
-	
+
 
 	function render_field_settings($field) {
 
@@ -155,7 +155,7 @@ class acf_field_image_select extends acf_field
 			'name'	=>	'image_extension',
 		));
 	}
-	
+
 	/*
 	*  input_admin_enqueue_scripts()
 	*
@@ -175,15 +175,15 @@ class acf_field_image_select extends acf_field
 		wp_enqueue_script(array(
 			'acf-input-image-select',
 		));
-		
+
 		// styles
 		wp_register_style('acf-input-image-select', plugins_url( 'css/image-select.css', __FILE__), array('acf-input'), $this->settings['version']);
 		wp_enqueue_style(array(
 			'acf-input-image-select',
 		));
 	}
-	
-	
+
+
 	/*
 	*  update_field()
 	*
@@ -199,37 +199,37 @@ class acf_field_image_select extends acf_field
 	*  @return	$field - the modified field
 	*/
 
-	
+
 	function update_field( $field ) {
-		
+
 		// decode choices (convert to array)
 		$field['choices'] = acf_decode_choices($field['choices']);
 		$field['default_value'] = acf_decode_choices($field['default_value']);
-		
-		
+
+
 		// return
 		return $field;
 	}
 
 	function update_value( $value, $post_id, $field ) {
-		
+
 		// validate
 		if( empty($value) ) {
-		
+
 			return $value;
-			
+
 		}
-		
-		
+
+
 		// array
 		if( is_array($value) ) {
-			
+
 			// save value as strings, so we can clearly search for them in SQL LIKE statements
 			$value = array_map('strval', $value);
-			
+
 		}
-		
-		
+
+
 		// return
 		return $value;
 	}
@@ -254,21 +254,20 @@ class acf_field_image_select extends acf_field
 	{
 		// bail early if no value
 		if( empty($value) ) {
-			return $value;	
+			return $value;
 		}
-
 
 		// get value
 
-		$retvalue = $field['image_path'] . esc_attr($value) . '.'.$field['image_extension'];
+		// $retvalue = $field['image_path'] . esc_attr($value) . '.'.$field['image_extension'];
 
 		// format value
 
 		// return value
-		return $retvalue;
+		return esc_attr($value);
 	}
 
-	
+
 }
 
 new acf_field_image_select();
